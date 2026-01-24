@@ -12,7 +12,8 @@
         <div class="nav-container">
             <a href="index.html" class="nav-logo">💖</a>
             <ul class="nav-menu">
-                <li><a href="letter.html" class="nav-link">Love Letter</a></li>
+                <li><a href="love-letter.html" class="nav-link">Love Letter</a></li>
+                <li><a href="photos.html" class="nav-link">Our Photos</a></li>
                 <li><a href="song.html" class="nav-link">Our Song</a></li>
             </ul>
         </div>
@@ -60,17 +61,13 @@
                 spread: 75,
                 origin: { y: 0.6 }
             });
-            document.getElementById('response').innerHTML = `
-                <div class="yes-response">
-                    <h2>Yay! I love you! ❤️</h2>
-                    <p>Feb 14th, 7PM at [Cafe/Restaurant], Koregaon Park ✨</p>
-                </div>
-            `;
-            document.querySelector('.buttons').style.display = 'none';
+            setTimeout(() => {
+                window.location.href = 'yes-celebration.html';
+            }, 2000);
         }
 
         function goToLetter() {
-            window.location.href = 'letter.html';
+            window.location.href = 'love-letter.html';
         }
 
         // Dodge button effect
