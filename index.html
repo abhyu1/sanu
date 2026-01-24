@@ -24,8 +24,8 @@
         <h1>Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
         <div class="countdown" id="countdown"></div>
         <div class="buttons">
-            <button class="btn-yes" onclick="sayYes()">Yes! ❤️</button>
-            <button class="btn-no" onclick="goToLetter()">Maybe... ✍️</button>
+            <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
+            <button class="btn-no" id="noBtn">Maybe... ✍️</button>
         </div>
         <div id="response" class="response"></div>
     </div>
@@ -42,6 +42,11 @@
             let days = Math.floor(diff / (1000*60*60*24));
             document.getElementById('countdown').innerText = `${days} days to our special day! 🌹`;
         }, 1000);
+
+        // Track NO clicks for growing YES button
+        let noClicks = 0;
+        const yesButton = document.getElementById('yesBtn');
+        const noButton = document.getElementById('noBtn');
 
         function createHearts() {
             for(let i = 0; i < 30; i++) {
@@ -70,12 +75,70 @@
             window.location.href = 'love-letter.html';
         }
 
-        // Dodge button effect
-        document.querySelector('.btn-no').addEventListener('mouseover', function() {
-            let x = (Math.random() - 0.5) * 100;
-            let y = (Math.random() - 0.5) * 100;
+        // 🎉 MAGIC: YES button GROWING on every NO click!
+        noButton.addEventListener('click', function() {
+            noClicks++;
+            
+            // Grow YES button (1.0x → 1.8x MAX)
+            const scale = Math.min(1.0 + (noClicks * 0.13), 1.8);
+            yesButton.style.transform = `scale(${scale})`;
+            yesButton.style.transition = 'transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            
+            // Glowing shadow increases
+            const glowIntensity = Math.min(30 + (noClicks * 8), 70);
+            yesButton.style.boxShadow = `0 ${glowIntensity}px ${glowIntensity*1.2}px rgba(255,107,157,0.6)`;
+            
+            // Change YES text to encourage her
+            const encouragements = [
+                'Yes! ❤️', 
+                'Pretty Please? 🥺❤️', 
+                'I Love You! 💕', 
+                'You Know You Want To! 😍', 
+                'YES PLEASE!! 🌹',
+                'MARRY ME ALREADY!! 💍💖'
+            ];
+            if (noClicks <= encouragements.length) {
+                yesButton.textContent = encouragements[noClicks - 1];
+            }
+            
+            // Sparkle explosion!
+            createSparkles();
+            
+            console.log(`NO #${noClicks} - YES is now ${scale.toFixed(1)}x BIGGER! 😍`);
+        });
+
+        // Dodge effect on NO hover
+        noButton.addEventListener('mouseover', function() {
+            let x = (Math.random() - 0.5) * 120;
+            let y = (Math.random() - 0.5) * 120;
             this.style.transform = `translate(${x}px, ${y}px)`;
         });
+
+        // Reset dodge on mouseleave
+        noButton.addEventListener('mouseleave', function() {
+            this.style.transform = 'translate(0, 0)';
+        });
+
+        // Sparkle explosion effect
+        function createSparkles() {
+            for(let i = 0; i < 12; i++) {
+                let sparkle = document.createElement('div');
+                sparkle.innerHTML = ['✨','⭐','💫','🌟'][Math.floor(Math.random()*4)];
+                sparkle.style.cssText = `
+                    position: fixed; left: 50%; top: 50%;
+                    font-size: ${1.5 + Math.random()}rem;
+                    pointer-events: none; z-index: 9999;
+                    transform: translate(-50%, -50%);
+                `;
+                sparkle.style.animation = `sparkleFade 0.8s ease-out forwards`;
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 800);
+            }
+        }
+
+        // YES button click
+        yesButton.addEventListener('click', sayYes);
     </script>
 </body>
 </html>
