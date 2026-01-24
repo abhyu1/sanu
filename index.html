@@ -21,7 +21,7 @@
 
     <div class="hero">
         <div class="hearts-container"></div>
-        <h1>Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
+        <h1 id="mainTitle">Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
         <div class="countdown" id="countdown"></div>
         <div class="buttons" id="buttonsContainer">
             <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
@@ -43,13 +43,12 @@
             document.getElementById('countdown').innerText = `${days} days to our special day! 🌹`;
         }, 1000);
 
-        // Track NO clicks for SCREEN-TAKING YES button
-        let noClicks = 0;
+        // MAYBE COUNTER - grows FOREVER!
+        let maybeClicks = 0;
         const yesButton = document.getElementById('yesBtn');
         const noButton = document.getElementById('noBtn');
         const buttonsContainer = document.getElementById('buttonsContainer');
-        const hero = document.querySelector('.hero');
-        const h1 = document.querySelector('h1');
+        const mainTitle = document.getElementById('mainTitle');
         const countdown = document.getElementById('countdown');
 
         function createHearts() {
@@ -65,128 +64,138 @@
         }
 
         function sayYes() {
-            confetti({
-                particleCount: 200,
-                spread: 90,
-                origin: { y: 0.6 }
-            });
+            // MASSIVE CELEBRATION!
+            for(let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 200,
+                        spread: 90,
+                        origin: { y: 0.6 }
+                    });
+                }, i * 200);
+            }
             setTimeout(() => {
                 window.location.href = 'yes-celebration.html';
-            }, 2000);
+            }, 3000);
         }
 
         function goToLetter() {
             window.location.href = 'love-letter.html';
         }
 
-        // 🌟 ULTIMATE SCREEN-TAKING YES BUTTON! 🌟
+        // 🔥 EVERY MAYBE CLICK = BIGGER YES! 🔥
         noButton.addEventListener('click', function() {
-            noClicks++;
+            maybeClicks++;
             
-            // PROGRESSIVE SCREEN TAKEOVER (1.0x → SCREEN SIZE!)
-            const progress = noClicks / 15; // 15 NOs to full screen
-            const scale = Math.min(1 + (progress * 2.5), 25); // Up to 25x (covers screen)
+            // INFINITE GROWTH! (1x → 50x+ screen coverage)
+            const growthRate = 0.25 + (maybeClicks * 0.08); // Accelerates!
+            const scale = 1 + growthRate;
             
-            // Position at center
+            // YES BUTTON TAKES OVER SCREEN
             yesButton.style.position = 'fixed';
             yesButton.style.left = '50%';
             yesButton.style.top = '50%';
             yesButton.style.transform = `translate(-50%, -50%) scale(${scale})`;
-            yesButton.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            yesButton.style.transition = 'all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
             yesButton.style.zIndex = '10000';
-            yesButton.style.borderRadius = `${80 / scale}px`; // Keep rounded as it grows
+            yesButton.style.borderRadius = `${Math.max(20 / scale, 8)}px`;
             
-            // INTENSE GLOWING (screen lights up!)
-            const glowSize = Math.min(20 + (noClicks * 15), 300);
+            // SCREEN-SHAKING GLOW!
+            const glowSize = Math.min(30 + (maybeClicks * 20), 500);
             yesButton.style.boxShadow = `
-                0 0 ${glowSize}px 50px rgba(255,107,157,0.9),
-                0 0 ${glowSize*0.7}px ${glowSize*1.5}px rgba(255,215,0,0.8)
+                0 0 ${glowSize}px 100px rgba(255,107,157,0.95),
+                0 0 ${glowSize*0.6}px ${glowSize*2}px rgba(255,215,0,0.9),
+                inset 0 0 50px rgba(255,255,255,0.3)
             `;
             
-            // Hide other elements progressively
-            const fadeOut = Math.min(noClicks / 10, 1);
-            h1.style.opacity = 1 - fadeOut * 0.8;
-            h1.style.transform = `scale(${1 - fadeOut * 0.3})`;
-            countdown.style.opacity = 1 - fadeOut;
-            buttonsContainer.style.opacity = 1 - fadeOut;
+            // FADE OUT EVERYTHING ELSE
+            const fadeProgress = Math.min(maybeClicks / 8, 1);
+            mainTitle.style.opacity = 1 - fadeProgress;
+            mainTitle.style.transform = `scale(${1 - fadeProgress * 0.5}) translateY(-${fadeProgress * 50}px)`;
+            countdown.style.opacity = 1 - fadeProgress;
+            buttonsContainer.style.opacity = 0.1;
             
-            // EPIC TEXT CHANGES (desperate romantic! 😍)
-            const takeoverTexts = [
+            // SHRINK "Maybe" button to NOTHING
+            const noScale = Math.max(1 - (maybeClicks * 0.08), 0.1);
+            noButton.style.transform = `scale(${noScale}) translate(${maybeClicks * 15}px, ${maybeClicks * 15}px)`;
+            noButton.style.opacity = Math.max(0.3 - (maybeClicks * 0.03), 0.1);
+            
+            // DESPERATE LOVE MESSAGES (gets CRAZY!)
+            const loveMessages = [
                 'Yes! ❤️',
-                'PLEASE?? 🥺❤️', 
-                'I LOVE YOU!! 💕💕',
-                'SAY YES!!! 😍😍',
-                'YOU KNOW IT!! 🌹🌹',
-                'COME ON!! 💖💖💖',
-                'YES YES YES!! 🎉',
-                'MARRY ME!! 💍💍',
-                'FULL SCREEN YES!! 📱💕',
-                'NOWHERE TO RUN!! 😈❤️',
-                'YES OR ELSE!! 🔥💖',
-                'SCREEN IS MINE!! 🌟',
-                'SURRENDER!! 💝💝',
-                'IT\'S DESTINY!! ✨✨',
-                'YES = FOREVER!! 💍💍💍'
+                'Please?? 🥺❤️',
+                'I Love You!! 💕💕',
+                'Say Yes!!! 😍😍',
+                'You Know You Do! 🌹🌹',
+                'Come On Baby!! 💖💖',
+                'YES YES YES!! 🎉🎉',
+                'Marry Me!! 💍💍',
+                'Click Me!! 📱💕💕',
+                'No Escape!! 😈❤️❤️',
+                'YES OR BUST!! 🔥💖',
+                'Takeover Time!! 🌟🌟',
+                'Surrender!! 💝💝💝',
+                'It\'s Fate!! ✨✨✨',
+                'Forever Yes!! 💍💍💍',
+                'I NEED YOU!! 😭❤️',
+                'WORLD\'S HAPPIEST!! 🎈🎈',
+                'LOVE WINS!! 💖💖💖💖'
             ];
             
-            if (noClicks <= takeoverTexts.length) {
-                yesButton.innerHTML = `<span style="font-size: ${Math.max(20 / scale, 0.8)}em; line-height: 1.2;">${takeoverTexts[Math.min(noClicks-1, takeoverTexts.length-1)]}</span>`;
-            }
+            const messageIndex = Math.min(maybeClicks - 1, loveMessages.length - 1);
+            yesButton.innerHTML = `<span style="font-size: ${Math.max(18 / scale, 0.6)}em; line-height: 1.1; text-shadow: 0 0 20px rgba(255,255,255,0.8);">${loveMessages[messageIndex]}</span>`;
             
-            // MASSIVE SPARKLE EXPLOSION!
-            createScreenSparkles();
+            // EXPLOSIVE FULL-SCREEN SPARKLES!
+            createMassiveSparkles();
             
-            // Screen shake effect
-            document.body.style.animation = 'screenShake 0.1s ease-in-out';
-            setTimeout(() => document.body.style.animation = '', 100);
+            // SCREEN SHAKE INTENSIFIES!
+            const shakeIntensity = Math.min(maybeClicks * 2, 20);
+            document.body.style.animation = `screenShake ${0.1 + (shakeIntensity/100)}s ease-in-out ${shakeIntensity} times`;
+            setTimeout(() => document.body.style.animation = '', 500);
             
-            console.log(`NO #${noClicks} - YES NOW ${scale.toFixed(1)}x (${Math.round(progress*100)}% screen takeover!) 😍`);
-            
-            // After 12 NOs, make No button tiny and cornered
-            if (noClicks >= 12) {
-                noButton.style.transform = 'scale(0.3) translate(100px, 100px)';
-                noButton.style.opacity = '0.5';
-            }
+            console.log(`MAYBE #${maybeClicks} - YES = ${scale.toFixed(1)}x (${Math.round((scale-1)*100)}% screen takeover!) 😍🔥`);
         });
 
-        // Dodge effect on NO hover (gets weaker)
+        // Dodge effect (gets WEAKER as YES dominates)
         noButton.addEventListener('mouseover', function() {
-            if (noClicks < 10) {
-                let dodgeDistance = 80 + (noClicks * 10);
-                let x = (Math.random() - 0.5) * dodgeDistance;
-                let y = (Math.random() - 0.5) * dodgeDistance;
-                this.style.transform = `translate(${x}px, ${y}px)`;
+            if (maybeClicks < 8) {
+                const dodgePower = 100 - (maybeClicks * 10);
+                let x = (Math.random() - 0.5) * dodgePower;
+                let y = (Math.random() - 0.5) * dodgePower;
+                this.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(1 - maybeClicks * 0.08, 0.2)})`;
             }
         });
 
         noButton.addEventListener('mouseleave', function() {
-            if (noClicks < 10) {
-                this.style.transform = 'translate(0, 0)';
+            if (maybeClicks < 8) {
+                const noScale = Math.max(1 - (maybeClicks * 0.08), 0.1);
+                this.style.transform = `translate(0, 0) scale(${noScale})`;
             }
         });
 
-        // EPIC SPARKLE EXPLOSION (covers screen!)
-        function createScreenSparkles() {
-            for(let i = 0; i < 25 + noClicks; i++) {
+        // MASSIVE SPARKLE EXPLOSION ACROSS ENTIRE SCREEN
+        function createMassiveSparkles() {
+            const sparkleCount = 30 + (maybeClicks * 3);
+            for(let i = 0; i < sparkleCount; i++) {
                 let sparkle = document.createElement('div');
-                sparkle.innerHTML = ['✨','⭐','💫','🌟','💖','🎉'][Math.floor(Math.random()*6)];
+                sparkle.innerHTML = ['✨','⭐','💫','🌟','💖','🎉','🎊','💥'][Math.floor(Math.random()*8)];
                 sparkle.style.cssText = `
                     position: fixed;
                     left: ${Math.random() * 100}vw;
                     top: ${Math.random() * 100}vh;
-                    font-size: ${0.8 + Math.random() * 2}rem;
+                    font-size: ${0.5 + Math.random() * 3 + (maybeClicks * 0.1)}rem;
                     pointer-events: none;
-                    z-index: 15000;
+                    z-index: 20000;
                     transform: translate(-50%, -50%);
                 `;
-                sparkle.style.animation = `sparkleFade 1s ease-out forwards`;
+                sparkle.style.animation = `sparkleFade 1.2s ease-out forwards`;
                 document.body.appendChild(sparkle);
                 
-                setTimeout(() => sparkle.remove(), 1000);
+                setTimeout(() => sparkle.remove(), 1200);
             }
         }
 
-        // YES button click
+        // YES BUTTON - VICTORY!
         yesButton.addEventListener('click', sayYes);
     </script>
 </body>
