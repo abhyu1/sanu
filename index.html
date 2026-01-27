@@ -25,7 +25,7 @@
         <div class="countdown" id="countdown"></div>
         <div class="buttons" id="buttonsContainer">
             <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
-            <button class="btn-no" id="noBtn">Maybe... ✍️</button>
+            <button class="btn-no" id="noBtn">No 😢</button>
         </div>
         <div id="response" class="response"></div>
     </div>
@@ -40,11 +40,11 @@
             let now = new Date().getTime();
             let diff = valentine - now;
             let days = Math.floor(diff / (1000*60*60*24));
-            document.getElementById('countdown').innerText = `${days} days to our special day! 🌹`;
+            document.getElementById('countdown').textContent = `${days} days to our special day! 🌹`;
         }, 1000);
 
-        // MAYBE COUNTER - grows FOREVER!
-        let maybeClicks = 0;
+        // NO CLICK COUNTER
+        let noClicks = 0;
         const yesButton = document.getElementById('yesBtn');
         const noButton = document.getElementById('noBtn');
         const buttonsContainer = document.getElementById('buttonsContainer');
@@ -52,151 +52,101 @@
         const countdown = document.getElementById('countdown');
 
         function createHearts() {
-            for(let i = 0; i < 30; i++) {
+            for(let i = 0; i < 40; i++) {
                 let heart = document.createElement('div');
-                heart.innerHTML = ['💖','💕','💗','💝'][Math.floor(Math.random()*4)];
+                heart.innerHTML = ['💖','💕','💗','💝','🌹','✨'][Math.floor(Math.random()*6)];
                 heart.className = 'heart';
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random()*3 + 2) + 's';
+                heart.style.animationDuration = (Math.random()*4 + 3) + 's';
                 heart.style.animationDelay = Math.random() * 2 + 's';
                 document.querySelector('.hearts-container').appendChild(heart);
             }
         }
 
         function sayYes() {
-            // MASSIVE CELEBRATION!
-            for(let i = 0; i < 10; i++) {
+            // Victory explosion!
+            for(let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     confetti({
-                        particleCount: 200,
+                        particleCount: 150,
                         spread: 90,
                         origin: { y: 0.6 }
                     });
-                }, i * 200);
+                }, i * 150);
             }
             setTimeout(() => {
                 window.location.href = 'yes-celebration.html';
-            }, 3000);
+            }, 2500);
         }
 
         function goToLetter() {
             window.location.href = 'love-letter.html';
         }
 
-        // 🔥 EVERY MAYBE CLICK = BIGGER YES! 🔥
+        // 🎯 PERFECT GROWING YES + VANISHING NO!
         noButton.addEventListener('click', function() {
-            maybeClicks++;
+            noClicks++;
             
-            // INFINITE GROWTH! (1x → 50x+ screen coverage)
-            const growthRate = 0.25 + (maybeClicks * 0.08); // Accelerates!
-            const scale = 1 + growthRate;
+            // YES GROWS LARGER each click (1x → 3x+)
+            const scale = 1 + (noClicks * 0.18);
+            yesButton.style.transform = `scale(${scale})`;
+            yesButton.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
             
-            // YES BUTTON TAKES OVER SCREEN
-            yesButton.style.position = 'fixed';
-            yesButton.style.left = '50%';
-            yesButton.style.top = '50%';
-            yesButton.style.transform = `translate(-50%, -50%) scale(${scale})`;
-            yesButton.style.transition = 'all 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-            yesButton.style.zIndex = '10000';
-            yesButton.style.borderRadius = `${Math.max(20 / scale, 8)}px`;
+            // GLOWING HEARTBEAT EFFECT
+            const glowIntensity = 20 + (noClicks * 12);
+            yesButton.style.boxShadow = `0 ${glowIntensity}px ${glowIntensity*1.5}px rgba(255,107,157,0.8)`;
             
-            // SCREEN-SHAKING GLOW!
-            const glowSize = Math.min(30 + (maybeClicks * 20), 500);
-            yesButton.style.boxShadow = `
-                0 0 ${glowSize}px 100px rgba(255,107,157,0.95),
-                0 0 ${glowSize*0.6}px ${glowSize*2}px rgba(255,215,0,0.9),
-                inset 0 0 50px rgba(255,255,255,0.3)
-            `;
+            // SHRINK & FADE NO BUTTON
+            const noScale = Math.max(1 - (noClicks * 0.12), 0);
+            const noOpacity = Math.max(1 - (noClicks * 0.125), 0);
+            noButton.style.transform = `scale(${noScale})`;
+            noButton.style.opacity = noOpacity;
+            noButton.style.transition = 'all 0.4s ease-out';
             
-            // FADE OUT EVERYTHING ELSE
-            const fadeProgress = Math.min(maybeClicks / 8, 1);
-            mainTitle.style.opacity = 1 - fadeProgress;
-            mainTitle.style.transform = `scale(${1 - fadeProgress * 0.5}) translateY(-${fadeProgress * 50}px)`;
-            countdown.style.opacity = 1 - fadeProgress;
-            buttonsContainer.style.opacity = 0.1;
+            // **NO VANISHES after 8 clicks**
+            if (noClicks >= 8) {
+                noButton.style.display = 'none';
+                buttonsContainer.style.justifyContent = 'center';
+                yesButton.style.margin = '0 auto';
+            }
             
-            // SHRINK "Maybe" button to NOTHING
-            const noScale = Math.max(1 - (maybeClicks * 0.08), 0.1);
-            noButton.style.transform = `scale(${noScale}) translate(${maybeClicks * 15}px, ${maybeClicks * 15}px)`;
-            noButton.style.opacity = Math.max(0.3 - (maybeClicks * 0.03), 0.1);
-            
-            // DESPERATE LOVE MESSAGES (gets CRAZY!)
-            const loveMessages = [
+            // ROMANTIC PHRASES (8 stages of desperation! 😍)
+            const romanticPhrases = [
                 'Yes! ❤️',
-                'Please?? 🥺❤️',
-                'I Love You!! 💕💕',
-                'Say Yes!!! 😍😍',
-                'You Know You Do! 🌹🌹',
-                'Come On Baby!! 💖💖',
-                'YES YES YES!! 🎉🎉',
-                'Marry Me!! 💍💍',
-                'Click Me!! 📱💕💕',
-                'No Escape!! 😈❤️❤️',
-                'YES OR BUST!! 🔥💖',
-                'Takeover Time!! 🌟🌟',
-                'Surrender!! 💝💝💝',
-                'It\'s Fate!! ✨✨✨',
-                'Forever Yes!! 💍💍💍',
-                'I NEED YOU!! 😭❤️',
-                'WORLD\'S HAPPIEST!! 🎈🎈',
-                'LOVE WINS!! 💖💖💖💖'
+                'Please? 🥺💕',
+                'I Love You!! 💖💖',
+                'You Know You Do! 🌹😍',
+                'Be Mine Forever! 💍✨',
+                'Say Yes Baby! 😘💕',
+                'My Heart Says YES! 💝💝',
+                'DESTINY CALLS! 🌟💖💖'
             ];
             
-            const messageIndex = Math.min(maybeClicks - 1, loveMessages.length - 1);
-            yesButton.innerHTML = `<span style="font-size: ${Math.max(18 / scale, 0.6)}em; line-height: 1.1; text-shadow: 0 0 20px rgba(255,255,255,0.8);">${loveMessages[messageIndex]}</span>`;
+            if (noClicks <= romanticPhrases.length) {
+                yesButton.textContent = romanticPhrases[Math.min(noClicks - 1, romanticPhrases.length - 1)];
+            }
             
-            // EXPLOSIVE FULL-SCREEN SPARKLES!
-            createMassiveSparkles();
+            // HEART EXPLOSION!
+            createHeartExplosion();
             
-            // SCREEN SHAKE INTENSIFIES!
-            const shakeIntensity = Math.min(maybeClicks * 2, 20);
-            document.body.style.animation = `screenShake ${0.1 + (shakeIntensity/100)}s ease-in-out ${shakeIntensity} times`;
-            setTimeout(() => document.body.style.animation = '', 500);
-            
-            console.log(`MAYBE #${maybeClicks} - YES = ${scale.toFixed(1)}x (${Math.round((scale-1)*100)}% screen takeover!) 😍🔥`);
+            console.log(`No #${noClicks}/8 - YES=${scale.toFixed(1)}x | No=${noScale.toFixed(1)}x | ${romanticPhrases[Math.min(noClicks-1,7)] || 'LOVE WINS!'}`);
         });
 
-        // Dodge effect (gets WEAKER as YES dominates)
+        // No button DODGES (gets weaker)
         noButton.addEventListener('mouseover', function() {
-            if (maybeClicks < 8) {
-                const dodgePower = 100 - (maybeClicks * 10);
-                let x = (Math.random() - 0.5) * dodgePower;
-                let y = (Math.random() - 0.5) * dodgePower;
-                this.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(1 - maybeClicks * 0.08, 0.2)})`;
+            if (noClicks < 6) {
+                const dodgeAmount = 60 - (noClicks * 8);
+                const x = (Math.random() - 0.5) * dodgeAmount;
+                const y = (Math.random() - 0.5) * dodgeAmount;
+                this.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(1 - noClicks * 0.12, 0)})`;
             }
         });
 
         noButton.addEventListener('mouseleave', function() {
-            if (maybeClicks < 8) {
-                const noScale = Math.max(1 - (maybeClicks * 0.08), 0.1);
-                this.style.transform = `translate(0, 0) scale(${noScale})`;
-            }
+            const noScale = Math.max(1 - (noClicks * 0.12), 0);
+            this.style.transform = `translate(0, 0) scale(${noScale})`;
         });
 
-        // MASSIVE SPARKLE EXPLOSION ACROSS ENTIRE SCREEN
-        function createMassiveSparkles() {
-            const sparkleCount = 30 + (maybeClicks * 3);
-            for(let i = 0; i < sparkleCount; i++) {
-                let sparkle = document.createElement('div');
-                sparkle.innerHTML = ['✨','⭐','💫','🌟','💖','🎉','🎊','💥'][Math.floor(Math.random()*8)];
-                sparkle.style.cssText = `
-                    position: fixed;
-                    left: ${Math.random() * 100}vw;
-                    top: ${Math.random() * 100}vh;
-                    font-size: ${0.5 + Math.random() * 3 + (maybeClicks * 0.1)}rem;
-                    pointer-events: none;
-                    z-index: 20000;
-                    transform: translate(-50%, -50%);
-                `;
-                sparkle.style.animation = `sparkleFade 1.2s ease-out forwards`;
-                document.body.appendChild(sparkle);
-                
-                setTimeout(() => sparkle.remove(), 1200);
-            }
-        }
-
-        // YES BUTTON - VICTORY!
-        yesButton.addEventListener('click', sayYes);
-    </script>
-</body>
-</html>
+        // HEART EXPLOSION ON EVERY NO!
+        function createHeartExplosion() {
+            const heartCount = 12 + (noClicks *
