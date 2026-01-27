@@ -4,10 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Be My Valentine? 💕</title>
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #feca57);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .navbar {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 2rem;
+        }
+        .nav-logo { font-size: 2rem; color: white; text-decoration: none; }
+        .nav-menu {
+            display: flex; list-style: none; gap: 2rem;
+        }
+        .nav-link {
+            color: white; text-decoration: none; font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-link:hover { color: #ffd700; transform: translateY(-2px); }
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding-top: 80px; position: relative;
+        }
+        .hearts-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        .heart {
+            position: absolute; font-size: 1.5rem;
+            animation: float 6s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem); color: white; margin-bottom: 1rem;
+            z-index: 2; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .name { color: #ffd700; font-style: italic; }
+        .countdown {
+            color: white; font-size: 1.5rem; margin-bottom: 2rem; font-weight: bold; z-index: 2;
+        }
+        .buttons {
+            display: flex; gap: 2rem; z-index: 2; flex-wrap: wrap; justify-content: center;
+        }
+        .btn-yes, .btn-no {
+            padding: 1rem 2.5rem; font-size: 1.3rem; border: none;
+            border-radius: 50px; cursor: pointer; transition: all 0.3s;
+            font-weight: bold; min-width: 180px;
+        }
+        .btn-yes {
+            background: linear-gradient(45deg, #ff6b9d, #ff8e8e); color: white;
+            box-shadow: 0 10px 30px rgba(255,107,157,0.4);
+        }
+        .btn-yes:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(255,107,157,0.6); }
+        .btn-no {
+            background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(10px);
+        }
+        .btn-no:hover { background: rgba(255,255,255,0.3); }
+        @keyframes heartPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0) translate(100px, 100px); opacity: 0; }
+        }
+    </style>
 </head>
-<body class="valentine-bg">
+<body>
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">💖</a>
@@ -20,133 +102,91 @@
     </nav>
 
     <div class="hero">
-        <div class="hearts-container"></div>
-        <h1 id="mainTitle">Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
+        <div class="hearts-container" id="hearts"></div>
+        <h1>Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
         <div class="countdown" id="countdown"></div>
-        <div class="buttons" id="buttonsContainer">
+        <div class="buttons">
             <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
             <button class="btn-no" id="noBtn">No 😢</button>
         </div>
-        <div id="response" class="response"></div>
     </div>
 
     <script>
-        // Floating hearts
-        createHearts();
-        
-        // Countdown to Valentine's 2026
-        let valentine = new Date('2026-02-14T00:00:00').getTime();
-        let timer = setInterval(() => {
-            let now = new Date().getTime();
-            let diff = valentine - now;
-            let days = Math.floor(diff / (1000*60*60*24));
-            document.getElementById('countdown').textContent = `${days} days to our special day! 🌹`;
-        }, 1000);
-
-        // NO CLICK COUNTER
+        // Initialize
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const buttons = document.querySelector('.buttons');
+        const heartsContainer = document.getElementById('hearts');
+        const countdownEl = document.getElementById('countdown');
         let noClicks = 0;
-        const yesButton = document.getElementById('yesBtn');
-        const noButton = document.getElementById('noBtn');
-        const buttonsContainer = document.getElementById('buttonsContainer');
-        const mainTitle = document.getElementById('mainTitle');
-        const countdown = document.getElementById('countdown');
 
-        function createHearts() {
-            for(let i = 0; i < 40; i++) {
-                let heart = document.createElement('div');
-                heart.innerHTML = ['💖','💕','💗','💝','🌹','✨'][Math.floor(Math.random()*6)];
-                heart.className = 'heart';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random()*4 + 3) + 's';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                document.querySelector('.hearts-container').appendChild(heart);
-            }
+        // Floating hearts
+        for(let i = 0; i < 30; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = ['💖','💕','💗','💝'][Math.floor(Math.random()*4)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random()*3 + 3) + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heartsContainer.appendChild(heart);
         }
 
-        function sayYes() {
-            // Victory explosion!
-            for(let i = 0; i < 15; i++) {
+        // Countdown
+        setInterval(() => {
+            const now = new Date().getTime();
+            const valentine = new Date('2026-02-14T00:00:00').getTime();
+            const diff = valentine - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            countdownEl.textContent = `${days} days to our special day! 🌹`;
+        }, 1000);
+
+        // YES BUTTON - Victory!
+        yesBtn.addEventListener('click', function() {
+            // Confetti explosion
+            for(let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     confetti({
                         particleCount: 150,
                         spread: 90,
                         origin: { y: 0.6 }
                     });
-                }, i * 150);
+                }, i * 200);
             }
             setTimeout(() => {
                 window.location.href = 'yes-celebration.html';
             }, 2500);
-        }
+        });
 
-        function goToLetter() {
-            window.location.href = 'love-letter.html';
-        }
-
-        // 🎯 PERFECT GROWING YES + VANISHING NO!
-        noButton.addEventListener('click', function() {
+        // NO BUTTON - Growing YES + Vanishing No
+        noBtn.addEventListener('click', function() {
             noClicks++;
             
-            // YES GROWS LARGER each click (1x → 3x+)
-            const scale = 1 + (noClicks * 0.18);
-            yesButton.style.transform = `scale(${scale})`;
-            yesButton.style.transition = 'transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            // YES GROWS bigger each click
+            const scale = 1 + (noClicks * 0.2);
+            yesBtn.style.transform = `scale(${scale})`;
+            yesBtn.style.transition = 'transform 0.5s ease-out';
+            yesBtn.style.boxShadow = `0 ${20 + noClicks * 10}px ${30 + noClicks * 15}px rgba(255,107,157,0.7)`;
             
-            // GLOWING HEARTBEAT EFFECT
-            const glowIntensity = 20 + (noClicks * 12);
-            yesButton.style.boxShadow = `0 ${glowIntensity}px ${glowIntensity*1.5}px rgba(255,107,157,0.8)`;
-            
-            // SHRINK & FADE NO BUTTON
-            const noScale = Math.max(1 - (noClicks * 0.12), 0);
-            const noOpacity = Math.max(1 - (noClicks * 0.125), 0);
-            noButton.style.transform = `scale(${noScale})`;
-            noButton.style.opacity = noOpacity;
-            noButton.style.transition = 'all 0.4s ease-out';
+            // SHRINK No button
+            const noScale = Math.max(1 - (noClicks * 0.15), 0);
+            noBtn.style.transform = `scale(${noScale})`;
+            noBtn.style.opacity = Math.max(1 - (noClicks * 0.12), 0);
             
             // **NO VANISHES after 8 clicks**
             if (noClicks >= 8) {
-                noButton.style.display = 'none';
-                buttonsContainer.style.justifyContent = 'center';
-                yesButton.style.margin = '0 auto';
+                noBtn.style.display = 'none';
+                buttons.style.justifyContent = 'center';
             }
             
-            // ROMANTIC PHRASES (8 stages of desperation! 😍)
-            const romanticPhrases = [
+            // Change YES text
+            const phrases = [
                 'Yes! ❤️',
                 'Please? 🥺💕',
-                'I Love You!! 💖💖',
-                'You Know You Do! 🌹😍',
-                'Be Mine Forever! 💍✨',
-                'Say Yes Baby! 😘💕',
-                'My Heart Says YES! 💝💝',
-                'DESTINY CALLS! 🌟💖💖'
+                'I Love You! 💖💖',
+                'Pretty Please! 🌹😍',
+                'Be Mine! 💍✨',
+                'Say Yes! 😘💕',
+                'YES PLEASE!! 💝💝',
+                'DESTINY! 🌟💖💖'
             ];
-            
-            if (noClicks <= romanticPhrases.length) {
-                yesButton.textContent = romanticPhrases[Math.min(noClicks - 1, romanticPhrases.length - 1)];
-            }
-            
-            // HEART EXPLOSION!
-            createHeartExplosion();
-            
-            console.log(`No #${noClicks}/8 - YES=${scale.toFixed(1)}x | No=${noScale.toFixed(1)}x | ${romanticPhrases[Math.min(noClicks-1,7)] || 'LOVE WINS!'}`);
-        });
-
-        // No button DODGES (gets weaker)
-        noButton.addEventListener('mouseover', function() {
-            if (noClicks < 6) {
-                const dodgeAmount = 60 - (noClicks * 8);
-                const x = (Math.random() - 0.5) * dodgeAmount;
-                const y = (Math.random() - 0.5) * dodgeAmount;
-                this.style.transform = `translate(${x}px, ${y}px) scale(${Math.max(1 - noClicks * 0.12, 0)})`;
-            }
-        });
-
-        noButton.addEventListener('mouseleave', function() {
-            const noScale = Math.max(1 - (noClicks * 0.12), 0);
-            this.style.transform = `translate(0, 0) scale(${noScale})`;
-        });
-
-        // HEART EXPLOSION ON EVERY NO!
-        function createHeartExplosion() {
-            const heartCount = 12 + (noClicks *
+            yesBtn.textConte
