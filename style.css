@@ -524,3 +524,11 @@ h1, .celebration-title, .celebration-subtitle, .signature {
 .buttons {
     overflow: hidden;
 }
+
+.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    filter: grayscale(1);
+}
+
