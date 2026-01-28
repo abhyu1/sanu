@@ -512,4 +512,15 @@ h1 {
     .celebration-details {
         padding: 1.5rem;
     }
+    
+}
+
+/* Font polish */
+h1, .celebration-title, .celebration-subtitle, .signature {
+    font-family: 'Dancing Script', cursive;
+}
+
+/* Prevent button overflow on mobile */
+.buttons {
+    overflow: hidden;
 }
