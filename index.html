@@ -3,263 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine? 💕</title>
-
-    <!-- Confetti -->
+    <title>Will You Be My Valentine? 💕</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #ff6b9d, #c44569, #feca57);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            overflow-x: hidden;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* NAVBAR */
-        .navbar {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .nav-logo {
-            font-size: 2rem;
-            color: white;
-            text-decoration: none;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .nav-link:hover {
-            color: gold;
-            transform: translateY(-2px);
-        }
-
-        /* HERO */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding-top: 80px;
-            position: relative;
-        }
-
-        .hearts-container {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .heart {
-            position: absolute;
-            font-size: 1.5rem;
-            animation: float 6s linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            color: white;
-            margin-bottom: 1rem;
-            z-index: 2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .name {
-            color: gold;
-            font-style: italic;
-        }
-
-        .countdown {
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            font-weight: bold;
-            z-index: 2;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 2rem;
-            z-index: 2;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        button {
-            padding: 1rem 2.5rem;
-            font-size: 1.3rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            min-width: 180px;
-            transition: 0.3s;
-        }
-
-        .btn-yes {
-            background: linear-gradient(45deg, #ff6b9d, #ff8e8e);
-            color: white;
-            box-shadow: 0 10px 30px rgba(255,107,157,0.4);
-        }
-
-        .btn-yes:hover {
-            transform: translateY(-5px);
-        }
-
-        .btn-no {
-            background: rgba(255,255,255,0.25);
-            color: white;
-            backdrop-filter: blur(10px);
-        }
-    </style>
 </head>
 
-<body>
+<body class="valentine-bg">
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">💖</a>
-            <ul class="nav-menu">
-                <li><a class="nav-link" href="#">Love Letter</a></li>
-                <li><a class="nav-link" href="#">Our Photos</a></li>
-                <li><a class="nav-link" href="#">Our Song</a></li>
-            </ul>
-        </div>
-    </nav>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">💖</a>
+        <ul class="nav-menu">
+            <li><a href="love-letter.html" class="nav-link">Love Letter</a></li>
+            <li><a href="photos.html" class="nav-link">Photos</a></li>
+            <li><a href="song.html" class="nav-link">Our Song</a></li>
+        </ul>
+    </div>
+</nav>
 
-    <section class="hero">
-        <div class="hearts-container" id="hearts"></div>
+<section class="hero">
+    <div class="hearts-container" id="hearts"></div>
 
-        <h1>Will you be my Valentine, <span class="name">Her Name</span>? 💕</h1>
-        <div class="countdown" id="countdown"></div>
+    <h1>Will you be my Valentine, <span class="name">[Her Name]</span>? 💕</h1>
+    <div class="countdown" id="countdown"></div>
 
-        <div class="buttons">
-            <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
-            <button class="btn-no" id="noBtn">No 😢</button>
-        </div>
-    </section>
+    <div class="buttons">
+        <button class="btn-yes" id="yesBtn">Yes! ❤️</button>
+        <button class="btn-no" id="noBtn">No 😢</button>
+    </div>
+</section>
 
-    <script>
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const buttons = document.querySelector('.buttons');
-        const heartsContainer = document.getElementById('hearts');
-        const countdownEl = document.getElementById('countdown');
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const heartsContainer = document.getElementById("hearts");
+const countdownEl = document.getElementById("countdown");
+let noClicks = 0;
 
-        let noClicks = 0;
+// Floating hearts
+for (let i = 0; i < 30; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = ["💖","💕","💗","💝"][Math.floor(Math.random()*4)];
+    heart.style.left = Math.random() * 100 + "%";
+    heart.style.animationDuration = (Math.random()*3 + 3) + "s";
+    heart.style.animationDelay = Math.random() * 2 + "s";
+    heartsContainer.appendChild(heart);
+}
 
-        // Floating hearts
-        for (let i = 0; i < 30; i++) {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = ['💖','💕','💗','💝'][Math.floor(Math.random() * 4)];
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            heart.style.animationDelay = Math.random() * 2 + 's';
-            heartsContainer.appendChild(heart);
-        }
+// Countdown
+setInterval(() => {
+    const now = new Date().getTime();
+    const valentine = new Date("2026-02-14T00:00:00").getTime();
+    const diff = Math.max(valentine - now, 0);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    countdownEl.textContent = `${days} days to our special day! 🌹`;
+}, 1000);
 
-        // Countdown
-        setInterval(() => {
-            const now = new Date().getTime();
-            const valentine = new Date('2026-02-14T00:00:00').getTime();
-            const diff = Math.max(valentine - now, 0);
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            countdownEl.textContent = `${days} days to our special day! 🌹`;
-        }, 1000);
+// YES
+yesBtn.addEventListener("click", () => {
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => confetti({ particleCount: 150, spread: 90 }), i * 200);
+    }
+    setTimeout(() => {
+        window.location.href = "yes-celebration.html";
+    }, 2000);
+});
 
-        // YES BUTTON
-        yesBtn.addEventListener('click', () => {
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    confetti({
-                        particleCount: 150,
-                        spread: 90,
-                        origin: { y: 0.6 }
-                    });
-                }, i * 200);
-            }
+// NO
+noBtn.addEventListener("click", () => {
+    noClicks++;
 
-            setTimeout(() => {
-                alert("SHE SAID YES 💖💖💖");
-            }, 2000);
-        });
+    yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+    noBtn.style.transform = `scale(${Math.max(1 - noClicks * 0.15, 0)})`;
+    noBtn.style.opacity = Math.max(1 - noClicks * 0.12, 0);
 
-        // NO BUTTON
-        noBtn.addEventListener('click', () => {
-            noClicks++;
+    if (noClicks >= 8) noBtn.style.display = "none";
 
-            // Grow YES
-            yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
-
-            // Shrink NO
-            noBtn.style.transform = `scale(${Math.max(1 - noClicks * 0.15, 0)})`;
-            noBtn.style.opacity = Math.max(1 - noClicks * 0.12, 0);
-
-            if (noClicks >= 8) {
-                noBtn.style.display = 'none';
-                buttons.style.justifyContent = 'center';
-            }
-
-            const phrases = [
-                'Yes! ❤️',
-                'Please? 🥺💕',
-                'I Love You! 💖💖',
-                'Pretty Please! 🌹😍',
-                'Be Mine! 💍✨',
-                'Say Yes! 😘💕',
-                'YES PLEASE!! 💝💝',
-                'DESTINY! 🌟💖💖'
-            ];
-
-            yesBtn.textContent = phrases[Math.min(noClicks, phrases.length - 1)];
-        });
-    </script>
+    const phrases = [
+        "Yes! ❤️","Please? 🥺💕","I Love You 💖",
+        "Be Mine 💍","Say Yes 😘","DESTINY 🌟"
+    ];
+    yesBtn.textContent = phrases[Math.min(noClicks, phrases.length - 1)];
+});
+</script>
 
 </body>
 </html>
-
