@@ -104,7 +104,7 @@ setInterval(() => {
 }, 1000);
 
 // YES
-yesBtn.addEventListener("click", () => {
+/*yesBtn.addEventListener("click", () => {
     for (let i = 0; i < 8; i++) {
         setTimeout(() => confetti({ particleCount: 150, spread: 90 }), i * 200);
     }
@@ -127,6 +127,36 @@ noBtn.addEventListener("click", () => {
     ];
     yesBtn.textContent = phrases[Math.min(noClicks, phrases.length - 1)];
 });
+*/
+
+
+yesBtn.addEventListener("click", () => {
+    if (!isValentinesDay()) return;
+
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => confetti({ particleCount: 150, spread: 90 }), i * 200);
+    }
+    setTimeout(() => {
+        window.location.href = "yes-celebration.html";
+    }, 2000);
+});
+
+noBtn.addEventListener("click", () => {
+    if (!isValentinesDay()) return;
+
+    noClicks++;
+    yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+    noBtn.style.transform = `scale(${Math.max(1 - noClicks * 0.15, 0)})`;
+    noBtn.style.opacity = Math.max(1 - noClicks * 0.12, 0);
+    if (noClicks >= 8) noBtn.style.display = "none";
+
+    const phrases = [
+        "Yes! ❤️","Please? 🥺💕","I Love You 💖",
+        "Be Mine 💍","Say Yes 😘","DESTINY 🌟"
+    ];
+    yesBtn.textContent = phrases[Math.min(noClicks, phrases.length - 1)];
+});
+
 </script>
 
 </body>
