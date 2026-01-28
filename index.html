@@ -37,6 +37,42 @@
 </section>
 
 <script>
+function isValentinesDay() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const valentine = new Date(`February 14, ${year} 00:00:00`);
+    return now >= valentine;
+}
+
+function lockButtons() {
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+
+    yesBtn.classList.add("locked");
+    noBtn.classList.add("locked");
+
+    yesBtn.textContent = "Locked 🔒";
+    noBtn.textContent = "Not Yet 💔";
+}
+
+function unlockButtons() {
+    yesBtn.disabled = false;
+    noBtn.disabled = false;
+
+    yesBtn.classList.remove("locked");
+    noBtn.classList.remove("locked");
+
+    yesBtn.textContent = "Yes! ❤️";
+    noBtn.textContent = "No 😢";
+}
+
+// Check lock on load
+document.addEventListener("DOMContentLoaded", () => {
+    if (!isValentinesDay()) {
+        lockButtons();
+    }
+});
+    
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const heartsContainer = document.getElementById("hearts");
