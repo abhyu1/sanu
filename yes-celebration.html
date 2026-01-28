@@ -3,75 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You Said YES! ❤️</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-</head>
-<body class="celebration-bg">
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">💖</a>
-            <ul class="nav-menu">
-                <li><a href="love-letter.html" class="nav-link">Love Letter</a></li>
-                <li><a href="photos.html" class="nav-link">Photos</a></li>
-                <li><a href="song.html" class="nav-link">Our Song</a></li>
-            </ul>
-        </div>
-    </nav>
+    <title>You Said YES ❤️</title>
 
-    <div class="celebration-hero">
-        <div class="hearts-container-celebration"></div>
-        
-        <div class="celebration-content">
-            <h1 class="celebration-title">SHE SAID YES! 🎉</h1>
-            <h2 class="celebration-subtitle">[Her Name], you made me the happiest person alive! ❤️</h2>
-            
-            <div class="celebration-details">
-                <p>📅 <strong>Valentine's Date:</strong> Feb 14th, 7PM</p>
-                <p>📍 <strong>Location:</strong> Vault Cafe, Koregaon Park</p>
-                <p>👔 <strong>Dress code:</strong> Something beautiful (which is everything you wear) ✨</p>
-            </div>
-            
-            <div class="celebrate-buttons">
-                <a href="love-letter.html" class="celebrate-btn love-btn">💌 Read Love Letter</a>
-                <a href="photos.html" class="celebrate-btn photos-btn">📸 Our Memories</a>
-                <a href="song.html" class="celebrate-btn song-btn">🎵 Our Song</a>
-            </div>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+
+<body class="celebration-bg">
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">💖</a>
+        <ul class="nav-menu">
+            <li><a href="love-letter.html" class="nav-link">Love Letter</a></li>
+            <li><a href="photos.html" class="nav-link">Photos</a></li>
+            <li><a href="song.html" class="nav-link">Our Song</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="celebration-hero">
+    <div class="celebration-content">
+        <h1 class="celebration-title">SHE SAID YES 🎉</h1>
+        <h2 class="celebration-subtitle">Best Valentine ever ❤️</h2>
+
+        <div class="celebration-details">
+            <p>📅 Feb 14th, 7PM</p>
+            <p>📍 Vault Cafe, Koregaon Park</p>
+            <p>✨ You + Me</p>
+        </div>
+
+        <div class="celebrate-buttons">
+            <a href="love-letter.html" class="celebrate-btn love-btn">💌 Love Letter</a>
+            <a href="photos.html" class="celebrate-btn photos-btn">📸 Photos</a>
+            <a href="song.html" class="celebrate-btn song-btn">🎵 Our Song</a>
         </div>
     </div>
+</div>
 
-    <script>
-        setInterval(() => {
-            confetti({
-                particleCount: 50,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: ['#ff6b9d', '#ffd700', '#ff8e8e']
-            });
-            confetti({
-                particleCount: 50,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#ff6b9d', '#ffd700', '#ff8e8e']
-            });
-        }, 2000);
+<script>
+setInterval(() => {
+    confetti({ particleCount: 60, spread: 70 });
+}, 2000);
+</script>
 
-        function createCelebrationHearts() {
-            for(let i = 0; i < 50; i++) {
-                let heart = document.createElement('div');
-                heart.innerHTML = ['💖','💕','💗','💝','✨','⭐'][Math.floor(Math.random()*6)];
-                heart.className = 'celebration-heart';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random()*4 + 3) + 's';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                heart.style.fontSize = (Math.random()*1.5 + 1) + 'rem';
-                document.querySelector('.hearts-container-celebration').appendChild(heart);
-            }
-        }
-        createCelebrationHearts();
-    </script>
 </body>
 </html>
