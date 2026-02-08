@@ -155,7 +155,7 @@ h1 {
     justify-content: center;
 }
 
-.btn-yes, .btn-no {
+ .btn-no {
     padding: 1rem 2.5rem;
     font-size: 1.3rem;
     border: none;
@@ -165,6 +165,25 @@ h1 {
     font-weight: bold;
     min-width: 180px;
 }
+
+.btn-yes {
+    min-width: 220px;          /* allow growing */
+    height: 70px;
+
+    padding: 0 28px;           /* horizontal space for text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;
+    transform-origin: center;
+
+    transition: 
+        transform 0.3s ease,
+        font-size 0.3s ease,
+        padding 0.3s ease;
+}
+
 
 .btn-yes {
     background: linear-gradient(45deg, #ff6b9d, #ff8e8e);
@@ -530,20 +549,5 @@ h1, .celebration-title, .celebration-subtitle, .signature {
     cursor: not-allowed;
     pointer-events: none;
     filter: grayscale(1);
-}
-
-/* FIX YES BUTTON GROWING ISSUE */
-.btn-yes {
-    width: 220px;              /* lock width */
-    height: 70px;              /* lock height */
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    white-space: nowrap;       /* prevent text wrapping */
-    transform-origin: center;  /* scale from center */
-
-    transition: transform 0.3s ease, font-size 0.3s ease;
 }
 
