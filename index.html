@@ -145,6 +145,8 @@ noBtn.addEventListener("click", () => {
         "Be Mine 💍","Say Yes 😘","DESTINY 🌟"
     ];
     yesBtn.textContent = phrases[Math.min(noClicks, phrases.length-1)];
+    yesBtn.style.fontSize = `${1.6 + noClicks * 0.15}rem`;
+
 });
 
 </script>
