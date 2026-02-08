@@ -12,6 +12,10 @@
 
 <body class="valentine-bg">
 
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3.mp3" type="audio/mpeg">
+</audio>
 
 
 <section class="hero">
@@ -150,6 +154,28 @@ noBtn.addEventListener("click", () => {
 });
 
 </script>
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+
+// If user already allowed music earlier, play automatically
+if (localStorage.getItem("musicAllowed") === "yes") {
+    bgMusic.volume = 0.4;
+    bgMusic.play().catch(() => {});
+}
+
+// First user interaction unlocks audio
+function unlockMusic() {
+    bgMusic.volume = 0.4;
+    bgMusic.play().then(() => {
+        localStorage.setItem("musicAllowed", "yes");
+    }).catch(() => {});
+    document.removeEventListener("click", unlockMusic);
+}
+
+document.addEventListener("click", unlockMusic);
+</script>
+
 
 </body>
 </html>
