@@ -11,6 +11,7 @@
 
 <body class="song-bg">
 
+
 <nav class="navbar">
     <div class="nav-container">
         <a href="index.html" class="nav-logo">💖</a>
@@ -22,6 +23,13 @@
     </div>
 </nav>
 
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="music.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle" class="music-toggle">🔊</button>
+    
 <div class="page-content">
     <div class="song-container">
         <h1>Our Song 💕</h1>
@@ -35,6 +43,46 @@
         <a href="photos.html" class="back-btn">← Back</a>
     </div>
 </div>
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("musicToggle");
+
+// Restore saved state
+const savedState = localStorage.getItem("musicState") || "on";
+bgMusic.volume = 0.4;
+bgMusic.muted = savedState === "off";
+toggleBtn.textContent = bgMusic.muted ? "🔇" : "🔊";
+
+// Auto play if already allowed
+if (localStorage.getItem("musicAllowed") === "yes") {
+    bgMusic.play().catch(() => {});
+}
+
+// Unlock music on first interaction
+function unlockMusic() {
+    bgMusic.play().then(() => {
+        localStorage.setItem("musicAllowed", "yes");
+    }).catch(() => {});
+    document.removeEventListener("click", unlockMusic);
+}
+document.addEventListener("click", unlockMusic);
+
+// Toggle mute/unmute
+toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    bgMusic.muted = !bgMusic.muted;
+
+    if (bgMusic.muted) {
+        toggleBtn.textContent = "🔇";
+        localStorage.setItem("musicState", "off");
+    } else {
+        toggleBtn.textContent = "🔊";
+        localStorage.setItem("musicState", "on");
+        bgMusic.play().catch(() => {});
+    }
+});
+</script>
 
 </body>
 </html>
