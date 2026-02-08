@@ -17,6 +17,9 @@
     <source src="music.mp3.mp3" type="audio/mpeg">
 </audio>
 
+<button id="musicToggle" class="music-toggle">🔊</button>
+
+
 
 <section class="hero">
     <div class="hearts-container" id="hearts"></div>
@@ -146,7 +149,7 @@ noBtn.addEventListener("click", () => {
 
     const phrases = [
         " Yes! ❤️"," Please? 🥺💕"," I Love You 💖",
-        " Be Mine 💍"," Say Yes 😘",". DESTINY 🌟"
+        " Be Mine 💍"," Say Yes 😘",".  DESTINY 🌟"
     ];
     yesBtn.textContent = phrases[Math.min(noClicks, phrases.length-1)];
     yesBtn.style.fontSize = `${1.6 + noClicks * 0.15}rem`;
@@ -175,6 +178,48 @@ function unlockMusic() {
 
 document.addEventListener("click", unlockMusic);
 </script>
+
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("musicToggle");
+
+// Restore saved state
+const savedState = localStorage.getItem("musicState") || "on";
+bgMusic.volume = 0.4;
+bgMusic.muted = savedState === "off";
+toggleBtn.textContent = bgMusic.muted ? "🔇" : "🔊";
+
+// Auto play if already allowed
+if (localStorage.getItem("musicAllowed") === "yes") {
+    bgMusic.play().catch(() => {});
+}
+
+// Unlock music on first interaction
+function unlockMusic() {
+    bgMusic.play().then(() => {
+        localStorage.setItem("musicAllowed", "yes");
+    }).catch(() => {});
+    document.removeEventListener("click", unlockMusic);
+}
+document.addEventListener("click", unlockMusic);
+
+// Toggle mute/unmute
+toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    bgMusic.muted = !bgMusic.muted;
+
+    if (bgMusic.muted) {
+        toggleBtn.textContent = "🔇";
+        localStorage.setItem("musicState", "off");
+    } else {
+        toggleBtn.textContent = "🔊";
+        localStorage.setItem("musicState", "on");
+        bgMusic.play().catch(() => {});
+    }
+});
+</script>
+
 
 
 </body>
