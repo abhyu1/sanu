@@ -23,6 +23,14 @@
     </div>
 </nav>
 
+<!-- 🎵 BACKGROUND MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="elvis.mp3.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle" class="music-toggle">🔊</button>
+
+
 <div class="celebration-hero">
     <div class="celebration-content">
         <h1 class="celebration-title">SHE SAID YES 🎉</h1>
@@ -47,6 +55,47 @@ setInterval(() => {
     confetti({ particleCount: 60, spread: 70 });
 }, 2000);
 </script>
+
+<script>
+const bgMusic = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("musicToggle");
+
+// Restore saved state
+const savedState = localStorage.getItem("musicState") || "on";
+bgMusic.volume = 0.4;
+bgMusic.muted = savedState === "off";
+toggleBtn.textContent = bgMusic.muted ? "🔇" : "🔊";
+
+// Auto play if already allowed
+if (localStorage.getItem("musicAllowed") === "yes") {
+    bgMusic.play().catch(() => {});
+}
+
+// Unlock music on first interaction
+function unlockMusic() {
+    bgMusic.play().then(() => {
+        localStorage.setItem("musicAllowed", "yes");
+    }).catch(() => {});
+    document.removeEventListener("click", unlockMusic);
+}
+document.addEventListener("click", unlockMusic);
+
+// Toggle mute/unmute
+toggleBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    bgMusic.muted = !bgMusic.muted;
+
+    if (bgMusic.muted) {
+        toggleBtn.textContent = "🔇";
+        localStorage.setItem("musicState", "off");
+    } else {
+        toggleBtn.textContent = "🔊";
+        localStorage.setItem("musicState", "on");
+        bgMusic.play().catch(() => {});
+    }
+});
+</script>
+
 
 </body>
 </html>
