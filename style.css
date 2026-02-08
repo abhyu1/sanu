@@ -532,3 +532,18 @@ h1, .celebration-title, .celebration-subtitle, .signature {
     filter: grayscale(1);
 }
 
+/* FIX YES BUTTON GROWING ISSUE */
+.btn-yes {
+    width: 220px;              /* lock width */
+    height: 70px;              /* lock height */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;       /* prevent text wrapping */
+    transform-origin: center;  /* scale from center */
+
+    transition: transform 0.3s ease, font-size 0.3s ease;
+}
+
