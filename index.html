@@ -135,7 +135,7 @@ noBtn.addEventListener("click", () => {
     if (!isValentinesDay()) return;
 
     noClicks++;
-    yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+    yesBtn.style.transform = `scale(${Math.min(1 + noClicks * 0.15, 2)})`;
     noBtn.style.transform = `scale(${Math.max(1 - noClicks * 0.15, 0)})`;
     noBtn.style.opacity = Math.max(1 - noClicks * 0.12, 0);
     if (noClicks >= 8) noBtn.style.display = "none";
